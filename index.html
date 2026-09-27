@@ -234,9 +234,9 @@ function finish(){
      if(navigator.share){
        try{
          if(navigator.canShare && navigator.canShare({files:[file]})){
-           await navigator.share({title:"MyDearDarlin' 楽曲ランキング",text:"私のMyDearDarlin'楽曲ランキングTOP10です。\nあなたもランキングを作ってみよう！　#マイディア\n"+url,files:[file]});
+           await navigator.share({title:"MyDearDarlin' 楽曲ランキング",text:"私のMyDearDarlin'楽曲ランキングTOP10です。\nあなたもランキングを作ってみよう！ #マイディア\n"+url,files:[file]});
          }else{
-           await navigator.share({title:"MyDearDarlin' 楽曲ランキング",text:"私のMyDearDarlin'楽曲ランキングTOP10です。\nあなたもランキングを作ってみよう！　#マイディア\n"+url});
+           await navigator.share({title:"MyDearDarlin' 楽曲ランキング",text:"私のMyDearDarlin'楽曲ランキングTOP10です。\nあなたもランキングを作ってみよう！ #マイディア\n"+url});
          }
        }catch(e){}
      }else{
