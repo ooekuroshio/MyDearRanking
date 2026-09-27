@@ -49,18 +49,18 @@ function scores(){
 function ranking(){let s=scores();return [...Array(N).keys()].sort((a,b)=>s[b]-s[a])}
 function pick(){
  // 最初は42曲すべてを最低1回は表示する「全曲確認フェーズ」。
- // その後、従来の適応型4曲比較へ移行する。
+ // その後、従来の適応型5曲比較へ移行する。
  const excluded=new Set(unknownFinal);
  let available=[...Array(N).keys()].filter(x=>!excluded.has(x));
- if(available.length<=4) return shuffle(available);
+ if(available.length<=5) return shuffle(available);
 
  const unseen=available.filter(x=>!shownOnce.has(x));
  if(unseen.length>0){
-   // 未登場曲を最優先。4曲に満たない最後の回だけ、既登場の曲で補う。
-   let q=shuffle(unseen).slice(0,4);
+   // 未登場曲を最優先。5曲に満たない最後の回だけ、既登場の曲で補う。
+   let q=shuffle(unseen).slice(0,5);
    if(q.length<4){
      let rest=shuffle(available.filter(x=>!q.includes(x)));
-     q=q.concat(rest.slice(0,4-q.length));
+     q=q.concat(rest.slice(0,5-q.length));
    }
    return q;
  }
@@ -79,16 +79,16 @@ function pick(){
    if(near.length) q.push(near[Math.floor(Math.random()*near.length)]);
 
    q=[...new Set(q)].filter(x=>!excluded.has(x));
-   while(q.length<4){
+   while(q.length<5){
      let rest=available.filter(x=>!q.includes(x));
      if(!rest.length)break;
      q.push(rest[Math.floor(Math.random()*rest.length)]);
    }
-   q=[...new Set(q)].filter(x=>!excluded.has(x)).slice(0,4);
-   if(q.length<4)continue;
+   q=[...new Set(q)].filter(x=>!excluded.has(x)).slice(0,5);
+   if(q.length<5)continue;
 
    let unseenPairs=0;
-   for(let i=0;i<4;i++)for(let j=i+1;j<4;j++)
+   for(let i=0;i<5;i++)for(let j=i+1;j<5;j++)
      if(wins[q[i]][q[j]]+wins[q[j]][q[i]]===0)unseenPairs++;
 
    let lowg=q.reduce((v,x)=>v+1/(1+games[x]),0);
@@ -97,7 +97,7 @@ function pick(){
    let val=unseenPairs*16+lowg*7-Math.abs(spread-9)*.7+Math.random()*7;
    if(!best||val>best.val)best={q,val};
  }
- return best ? best.q : shuffle(available).slice(0,4);
+ return best ? best.q : shuffle(available).slice(0,5);
 }
 function drawCards(){
  let box=document.getElementById("cards");box.innerHTML="";
@@ -124,15 +124,20 @@ function resetCurrentQuestion(){
  selected=[];
  unknown.clear();
  // 曲そのものの除外状態は維持する。
- // 現在の4曲はそのまま表示し、除外済みの曲は「知らない」として表示する。
+ // 現在の5曲はそのまま表示し、除外済みの曲は「知らない」として表示する。
  unknown=new Set(current.filter(idx=>unknownFinal.has(idx)));
  drawCards();
 }
 function render(){ newQuestion(); }
 function toggleUnknown(idx,el){
- // 「知らない」はこのセッション中ずっと除外。
- // 解除ボタンにはせず、二度押ししても除外状態を維持する。
- if(unknownFinal.has(idx)) return;
+ // 「知らない」は、同じ画面で再度タップすると取り消せる。
+ // 取り消した曲は、以後の比較候補にも戻る。
+ if(unknown.has(idx)){
+   unknown.delete(idx);
+   unknownFinal.delete(idx);
+   drawCards();
+   return;
+ }
 
  selected=selected.filter(x=>x!==idx);
  unknown.add(idx);
@@ -142,15 +147,15 @@ function toggleUnknown(idx,el){
 function choose(idx){
  if(unknown.has(idx)) return;
  if(selected.includes(idx)) return;
- if(selected.length>=4-unknown.size) return;
+ if(selected.length>=5-unknown.size) return;
  selected.push(idx);
  drawCards();
 }
 function update(){
  document.getElementById("roundText").textContent=`${round+1}問目`;
  const allSeen=shownOnce.size>=N;
- document.getElementById("bar").style.width=(allSeen?Math.min(100,(round-Math.ceil(N/4))/(MAX-Math.ceil(N/4))*100):Math.min(100,shownOnce.size/N*100))+"%";
- document.getElementById("decide").disabled=(selected.length+unknown.size!==4);
+ document.getElementById("bar").style.width=(allSeen?Math.min(100,(round-Math.ceil(N/5))/(MAX-Math.ceil(N/5))*100):Math.min(100,shownOnce.size/N*100))+"%";
+ document.getElementById("decide").disabled=(selected.length+unknown.size!==5);
  document.getElementById("phaseText").textContent=allSeen?"ランキングを整理中":`全42曲を確認中（${shownOnce.size}/42曲）`;
 }
 document.getElementById("resetSel").addEventListener("click",resetCurrentQuestion);
@@ -169,7 +174,7 @@ function finish(){
  let r=ranking().filter(x=>!unknownFinal.has(x)),s=scores();
  document.getElementById("game").style.display="none";document.getElementById("result").style.display="block";
  document.getElementById("knownCount").textContent=known.size;document.getElementById("unknownCount").textContent=unknownFinal.size;
- document.getElementById("resultIntro").textContent=`${round}回の4曲比較から、知っている曲だけでランキングを作りました。`;
+ document.getElementById("resultIntro").textContent=`${round}回の5曲比較から、知っている曲だけでランキングを作りました。`;
  let box=document.getElementById("ranking");box.innerHTML="";
  let visible=false;
  const medal=["🥇","🥈","🥉"];
