@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>あなたのMyDearDarlin'楽曲ランキング</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#fdebf2;color:#4a3940;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif}
+.wrap{max-width:720px;margin:auto;padding:22px 16px 40px}h1{font-size:25px;text-align:center;margin:8px 0 4px}.sub{text-align:center;color:#777;font-size:13px;margin-bottom:20px}
+.progress{height:8px;background:#f1cbd9;border-radius:8px;overflow:hidden;margin-bottom:9px}.bar{height:100%;background:#333;width:0%;transition:.3s}
+.status{display:flex;justify-content:space-between;font-size:12px;color:#777;margin-bottom:16px}.question{text-align:center;font-size:15px;font-weight:700;margin-bottom:8px}.hint{text-align:center;color:#777;font-size:12px;margin-bottom:14px}
+.cards{display:grid;gap:10px}.card{background:#fffafd;border:2px solid #efd3df;border-radius:14px;padding:14px;min-height:68px;display:flex;align-items:center;cursor:pointer;box-shadow:0 1px 2px #00000008}.card.selected{border-color:#d77fa3;background:#f9dce8}.card.excluded{opacity:.48;background:#f5e9ee;border-color:#e0c6d2;cursor:default}.card.excluded .name{text-decoration:line-through}.card.excluded *{pointer-events:none}.card.excluded .unknown{pointer-events:auto}
+.badge{width:28px;height:28px;border-radius:50%;border:1px solid #bbb;display:flex;align-items:center;justify-content:center;font-weight:700;margin-right:12px;flex:none}.card.selected .badge{background:#d77fa3;color:#fff;border-color:#222}
+.name{font-size:16px;font-weight:700;flex:1}.unknown{font-size:12px;border:1px solid #c8c4bd;background:#fff7fa;border-radius:9px;padding:8px 9px;cursor:pointer;color:#555}.unknown.active{background:#d77fa3;color:#fff;border-color:#d77fa3}
+.actions{display:flex;gap:8px;margin-top:14px}button{border:0;border-radius:11px;padding:13px 16px;font-size:14px;font-weight:700;cursor:pointer}.primary{background:#d77fa3;color:#fff;flex:1}.secondary{background:#f2dbe5;color:#5a404a}button:disabled{opacity:.35;cursor:not-allowed}
+.note{font-size:11px;color:#888;line-height:1.6;margin-top:13px;text-align:center}.result{display:none}.result h2{text-align:center;font-size:23px;margin:8px 0 6px}.resultIntro{text-align:center;color:#777;font-size:12px;line-height:1.6;margin-bottom:18px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}.stat{background:#fffafd;border:1px solid #efd3df;border-radius:12px;padding:12px;text-align:center}.stat b{display:block;font-size:21px}.stat span{font-size:11px;color:#888}
+.rank{display:flex;align-items:center;background:#fff;border-radius:12px;padding:11px 12px;margin:7px 0;border:1px solid #efd3df}.num{width:38px;font-size:18px;font-weight:800;color:#777;text-align:center}.song{font-weight:700;flex:1}.score{font-size:11px;color:#999}.top10{background:#f9dce8}.rank.medal{padding:13px 12px}.rank.medal .num{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;background:#fff;border:1px solid #d8d5cf}.rank.medal .song{font-size:16px}.moreRanks{width:100%;margin-top:10px}.shareNote{font-size:11px;color:#888;text-align:center;line-height:1.6;margin-top:8px}.sharePreview{display:none;margin-top:12px;text-align:center}.sharePreview img{max-width:100%;border-radius:12px;border:1px solid #efd3df}
+.unknownList{margin-top:20px}.unknownList h3{font-size:14px;margin:0 0 8px}.unknownItem{display:inline-block;background:#f2dbe5;border-radius:8px;padding:6px 8px;margin:3px;font-size:11px}
+.share{width:100%;margin-top:15px}.restart{width:100%;margin-top:9px}.small{font-size:11px;color:#999;text-align:center;margin-top:12px;line-height:1.6}
+@media(max-width:430px){.unknown{padding:7px;font-size:11px}.name{font-size:15px}}
+</style></head>
+<body><div class="wrap">
+<section id="game">
+<h1>あなたのMyDearDarlin'楽曲ランキング</h1><div class="sub">まず42曲を一度ずつ確認し、その後であなたの好きな順を作ります</div>
+<div class="progress"><div class="bar" id="bar"></div></div><div class="status"><span id="roundText">1問目</span><span id="phaseText">まずは全体を把握中</span></div>
+<div class="question">好きな曲の順にタップして下さい</div><div class="hint">知らない曲は、右の「知らない」を押してください</div>
+<div class="cards" id="cards"></div>
+<div class="actions"><button class="secondary" id="resetSel" type="button">選び直す</button><button class="primary" id="decide" type="button" disabled>この順位で決定</button></div>
+<div class="note">最初は42曲すべてが一度は登場します。「知らない」は最下位にはせず、以後の比較候補から除外します。</div>
+</section>
+<section class="result" id="result">
+<h1>あなたのMyDearDarlin'楽曲ランキング</h1><h2>あなたのランキング</h2><div class="resultIntro" id="resultIntro"></div>
+<div class="stats"><div class="stat"><b id="knownCount">0</b><span>知っている曲</span></div><div class="stat"><b id="unknownCount">0</b><span>知らない曲</span></div></div>
+<div id="ranking"></div><button class="secondary moreRanks" id="moreRanks" type="button">11位以下を見る</button><div class="unknownList" id="unknownBox"></div>
+<button class="primary share" id="share" type="button">TOP10を画像でシェア</button><div class="shareNote">SNSではTOP10の画像と、このランキングページのURLを共有できます。</div><div class="sharePreview" id="sharePreview"><div class="shareNote">共有用画像</div><img id="shareImage" alt="MyDearDarlin'ランキング共有画像"></div><button class="secondary restart" id="restart" type="button">もう一度遊ぶ</button>
+<div class="small">「知らない」と答えた曲は順位に影響せず、以後の比較候補から除外されます。<br>同じ人でも、その日の気分でランキングが変わってOKです。</div>
+</section></div>
+<script>
+const songs=["My Dear","ナノLOVE","夏が来る","トーキョーガール","Kaleid0scopE","MDDシンドローム","七転八起ドリーマー","FLOWER","君の声","ぱっ！！！！！！ねーしょん","ラブレター","Symphony#5","アイスクリーム","PSPP","Twilight","LiaR","告白","一生涯オリジナリティ","真夏の彼方","Doki Doki ロングバケーション","DA DA DA！","君色ダイアリー","ミチシルベ","SAYONARA","夏色Runner","ブレーメン","僕らの詩","Shout It Out","プラネタリウム","恋と花火とひとひらわたし","Music Fighter","雪恋トリガー","キャラメルミルク","一番星","レペゼンアース","Candy Chu！","ハナムケロンリー","約束","青の君","ポケット","ワガママHOLiDAY","恋するトップノート"];
+const N=songs.length, MIN=16, MAX=30;
+let round=0,selected=[],unknown=new Set(),current=[],wins=Array.from({length:N},()=>Array(N).fill(0)),games=Array(N).fill(0),history=[],known=new Set(),unknownFinal=new Set(),shownOnce=new Set();
+
+function shuffle(a){return a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1])}
+function scores(){
+ let s=Array(N).fill(1);
+ for(let it=0;it<70;it++){let ns=Array(N).fill(0);
+  for(let i=0;i<N;i++){let w=0,d=0;for(let j=0;j<N;j++){if(i===j)continue;let n=wins[i][j]+wins[j][i];if(n){w+=wins[i][j];d+=n/(s[i]+s[j]);}}ns[i]=d?w/d:s[i]}
+  for(let i=0;i<N;i++)ns[i]=Math.max(.05,ns[i]*.985+.015);let m=ns.reduce((a,b)=>a+b,0)/N;for(let i=0;i<N;i++)s[i]=ns[i]/m;
+ }return s;
+}
+function ranking(){let s=scores();return [...Array(N).keys()].sort((a,b)=>s[b]-s[a])}
+function pick(){
+ // 最初は42曲すべてを最低1回は表示する「全曲確認フェーズ」。
+ // その後、従来の適応型4曲比較へ移行する。
+ const excluded=new Set(unknownFinal);
+ let available=[...Array(N).keys()].filter(x=>!excluded.has(x));
+ if(available.length<=4) return shuffle(available);
+
+ const unseen=available.filter(x=>!shownOnce.has(x));
+ if(unseen.length>0){
+   // 未登場曲を最優先。4曲に満たない最後の回だけ、既登場の曲で補う。
+   let q=shuffle(unseen).slice(0,4);
+   if(q.length<4){
+     let rest=shuffle(available.filter(x=>!q.includes(x)));
+     q=q.concat(rest.slice(0,4-q.length));
+   }
+   return q;
+ }
+
+ // ここから先は従来の適応型選択。
+ let low=available.slice().sort((a,b)=>games[a]-games[b]).slice(0,18);
+ let r=ranking().filter(x=>!excluded.has(x));
+ let best=null;
+
+ for(let z=0;z<300;z++){
+   let q=shuffle(low).slice(0,2);
+   let a=r[Math.floor(Math.random()*r.length)];
+   if(a!==undefined) q.push(a);
+   let pos=a===undefined ? -1 : r.indexOf(a);
+   let near=(pos>=0 ? r.slice(Math.max(0,pos-6),Math.min(r.length,pos+7)) : r);
+   if(near.length) q.push(near[Math.floor(Math.random()*near.length)]);
+
+   q=[...new Set(q)].filter(x=>!excluded.has(x));
+   while(q.length<4){
+     let rest=available.filter(x=>!q.includes(x));
+     if(!rest.length)break;
+     q.push(rest[Math.floor(Math.random()*rest.length)]);
+   }
+   q=[...new Set(q)].filter(x=>!excluded.has(x)).slice(0,4);
+   if(q.length<4)continue;
+
+   let unseenPairs=0;
+   for(let i=0;i<4;i++)for(let j=i+1;j<4;j++)
+     if(wins[q[i]][q[j]]+wins[q[j]][q[i]]===0)unseenPairs++;
+
+   let lowg=q.reduce((v,x)=>v+1/(1+games[x]),0);
+   let posi=q.map(x=>r.indexOf(x)).filter(x=>x>=0).sort((a,b)=>a-b);
+   let spread=posi.length>=2 ? posi[posi.length-1]-posi[0] : 0;
+   let val=unseenPairs*16+lowg*7-Math.abs(spread-9)*.7+Math.random()*7;
+   if(!best||val>best.val)best={q,val};
+ }
+ return best ? best.q : shuffle(available).slice(0,4);
+}
+function drawCards(){
+ let box=document.getElementById("cards");box.innerHTML="";
+ current.forEach(idx=>{
+  let el=document.createElement("div");
+  el.className="card"+(unknown.has(idx)?" excluded":"");
+  el.dataset.idx=idx;
+  el.innerHTML='<div class="badge">'+(unknown.has(idx)?"×":(selected.includes(idx)?selected.indexOf(idx)+1:"—"))+'</div><div class="name">'+songs[idx]+'</div><button class="unknown'+(unknown.has(idx)?" active":"")+'" type="button">'+(unknown.has(idx)?"知らない ✓":"知らない")+'</button>';
+  el.querySelector(".unknown").addEventListener("click",e=>{e.preventDefault();e.stopPropagation();toggleUnknown(idx,el)});
+  el.addEventListener("click",e=>{if(!e.target.closest(".unknown")) choose(idx)});
+  if(selected.includes(idx)) el.classList.add("selected");
+  box.appendChild(el);
+ });
+ update();
+}
+function newQuestion(){
+ current=pick();
+ current.forEach(x=>shownOnce.add(x));
+ selected=[];
+ unknown.clear();
+ drawCards();
+}
+function resetCurrentQuestion(){
+ selected=[];
+ unknown.clear();
+ // 曲そのものの除外状態は維持する。
+ // 現在の4曲はそのまま表示し、除外済みの曲は「知らない」として表示する。
+ unknown=new Set(current.filter(idx=>unknownFinal.has(idx)));
+ drawCards();
+}
+function render(){ newQuestion(); }
+function toggleUnknown(idx,el){
+ // 「知らない」はこのセッション中ずっと除外。
+ // 解除ボタンにはせず、二度押ししても除外状態を維持する。
+ if(unknownFinal.has(idx)) return;
+
+ selected=selected.filter(x=>x!==idx);
+ unknown.add(idx);
+ unknownFinal.add(idx);
+ drawCards();
+}
+function choose(idx){
+ if(unknown.has(idx)) return;
+ if(selected.includes(idx)) return;
+ if(selected.length>=4-unknown.size) return;
+ selected.push(idx);
+ drawCards();
+}
+function update(){
+ document.getElementById("roundText").textContent=`${round+1}問目`;
+ const allSeen=shownOnce.size>=N;
+ document.getElementById("bar").style.width=(allSeen?Math.min(100,(round-Math.ceil(N/4))/(MAX-Math.ceil(N/4))*100):Math.min(100,shownOnce.size/N*100))+"%";
+ document.getElementById("decide").disabled=(selected.length+unknown.size!==4);
+ document.getElementById("phaseText").textContent=allSeen?"ランキングを整理中":`全42曲を確認中（${shownOnce.size}/42曲）`;
+}
+document.getElementById("resetSel").addEventListener("click",resetCurrentQuestion);
+document.getElementById("decide").addEventListener("click",()=>{
+ selected.forEach(x=>known.add(x));
+ for(let p=0;p<selected.length;p++){games[selected[p]]++;for(let q=p+1;q<selected.length;q++)wins[selected[p]][selected[q]]++}
+ round++;history.push(ranking());
+ let active=[...Array(N).keys()].filter(x=>!unknownFinal.has(x));
+ const allSongsChecked=shownOnce.size>=N;
+ if(allSongsChecked && round>=MIN && (known.size>=Math.min(20,N-unknownFinal.size) && stable() || round>=MAX || active.length<=6))finish();else newQuestion();
+});
+function stable(){
+ if(history.length<4)return false;let rr=history.slice(-4);for(let k=1;k<rr.length;k++){let a=rr[k-1],b=rr[k],pa=[],pb=[];a.forEach((x,i)=>pa[x]=i);b.forEach((x,i)=>pb[x]=i);let m=0,c=0;for(let x of [...known]){m+=Math.abs(pa[x]-pb[x]);c++}if(c&&m/c>.6)return false}return true;
+}
+function finish(){
+ let r=ranking().filter(x=>!unknownFinal.has(x)),s=scores();
+ document.getElementById("game").style.display="none";document.getElementById("result").style.display="block";
+ document.getElementById("knownCount").textContent=known.size;document.getElementById("unknownCount").textContent=unknownFinal.size;
+ document.getElementById("resultIntro").textContent=`${round}回の4曲比較から、知っている曲だけでランキングを作りました。`;
+ let box=document.getElementById("ranking");box.innerHTML="";
+ let visible=false;
+ const medal=["🥇","🥈","🥉"];
+ function drawRanks(){
+   box.innerHTML="";
+   let limit=visible?r.length:Math.min(10,r.length);
+   r.slice(0,limit).forEach((idx,k)=>{
+     let e=document.createElement("div");
+     e.className="rank"+(k<10?" top10":"")+(k<3?" medal":"");
+     let n=k<3?medal[k]:String(k+1);
+     e.innerHTML=`<div class="num">${n}</div><div class="song">${songs[idx]}</div><div class="score">${s[idx].toFixed(2)}</div>`;
+     box.appendChild(e);
+   });
+   let more=document.getElementById("moreRanks");
+   if(r.length<=10){more.style.display="none"}
+   else {more.style.display="block";more.textContent=visible?"上位10位に戻す":"11位以下を見る"}
+ }
+ drawRanks();
+ document.getElementById("moreRanks").onclick=()=>{visible=!visible;drawRanks();window.scrollTo({top:document.getElementById("ranking").offsetTop-12,behavior:"smooth"})};
+ let ub=document.getElementById("unknownBox");if(unknownFinal.size){ub.innerHTML="<h3>今回「知らない」とした曲</h3>"+[...unknownFinal].map(x=>`<span class="unknownItem">${songs[x]}</span>`).join("")}else ub.innerHTML="";
+
+ function makeShareImage(){
+   const w=1080,h=1350;
+   const c=document.createElement("canvas");c.width=w;c.height=h;const ctx=c.getContext("2d");
+   ctx.fillStyle="#fdebf2";ctx.fillRect(0,0,w,h);
+   ctx.fillStyle="#4a3940";ctx.textAlign="center";ctx.font="700 46px -apple-system,BlinkMacSystemFont,'Yu Gothic',Meiryo,sans-serif";
+   ctx.fillText("MyDearDarlin'",w/2,82);
+   ctx.font="700 34px -apple-system,BlinkMacSystemFont,'Yu Gothic',Meiryo,sans-serif";ctx.fillText("あなたの楽曲ランキング",w/2,130);
+   ctx.font="24px -apple-system,BlinkMacSystemFont,'Yu Gothic',Meiryo,sans-serif";ctx.fillStyle="#8b6877";ctx.fillText(`知っている曲 ${known.size}曲`,w/2,168);
+   const startY=225,rowH=92;
+   r.slice(0,10).forEach((idx,k)=>{
+     const y=startY+k*rowH;
+     ctx.fillStyle="#fff";roundRect(ctx,70,y,w-140,72,18);ctx.fill();
+     ctx.strokeStyle="#efd3df";ctx.lineWidth=2;roundRect(ctx,70,y,w-140,72,18);ctx.stroke();
+     ctx.fillStyle="#4a3940";ctx.textAlign="center";ctx.font=k<3?"700 32px sans-serif":"700 27px sans-serif";
+     ctx.fillText(k<3?medal[k]:String(k+1),112,y+47);
+     ctx.textAlign="left";ctx.font="700 27px -apple-system,BlinkMacSystemFont,'Yu Gothic',Meiryo,sans-serif";ctx.fillStyle="#4a3940";
+     ctx.fillText(songs[idx],165,y+45);
+   });
+   ctx.textAlign="center";ctx.font="24px -apple-system,BlinkMacSystemFont,'Yu Gothic',Meiryo,sans-serif";ctx.fillStyle="#8b6877";
+   ctx.fillText("あなたもランキングを作ってみよう",w/2,1195);
+   let url=location.href;
+   if(url.length>72) url=url.slice(0,69)+"...";
+   ctx.font="18px -apple-system,BlinkMacSystemFont,'Yu Gothic',Meiryo,sans-serif";ctx.fillText(url,w/2,1232);
+   ctx.font="20px -apple-system,BlinkMacSystemFont,'Yu Gothic',Meiryo,sans-serif";ctx.fillStyle="#999";ctx.fillText("MyDearDarlin' Song Ranking",w/2,1295);
+   return c;
+ }
+ function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+ document.getElementById("share").onclick=async()=>{
+   const canvas=makeShareImage();
+   canvas.toBlob(async blob=>{
+     if(!blob)return;
+     const file=new File([blob],"MyDearDarlin_ランキングTOP10.png",{type:"image/png"});
+     const url=location.href;
+     const preview=document.getElementById("sharePreview");const img=document.getElementById("shareImage");
+     img.src=URL.createObjectURL(blob);preview.style.display="block";
+     if(navigator.share){
+       try{
+         if(navigator.canShare && navigator.canShare({files:[file]})){
+           await navigator.share({title:"MyDearDarlin' 楽曲ランキング",text:"私のMyDearDarlin'楽曲ランキングTOP10です。\nあなたもランキングを作ってみよう！\n"+url,files:[file]});
+         }else{
+           await navigator.share({title:"MyDearDarlin' 楽曲ランキング",text:"私のMyDearDarlin'楽曲ランキングTOP10です。\nあなたもランキングを作ってみよう！\n"+url});
+         }
+       }catch(e){}
+     }else{
+       alert("この端末では直接シェアできないため、画面に表示した画像を保存してSNSでシェアしてください。URLも一緒に添えてください。");
+     }
+   },"image/png");
+ };
+}
+document.getElementById("restart").addEventListener("click",()=>location.reload());
+render();
+</script></body></html>
