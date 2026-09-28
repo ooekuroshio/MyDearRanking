@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>あなたのMyDearDarlin'楽曲ランキング</title>
+<title>あなたのMyDearDarlin'楽曲ランキング｜みんなのランキング対応版</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#fdebf2;color:#4a3940;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif}
 .wrap{max-width:720px;margin:auto;padding:22px 16px 40px}h1{font-size:25px;text-align:center;margin:8px 0 4px}.sub{text-align:center;color:#777;font-size:13px;margin-bottom:20px}
@@ -10,14 +10,32 @@
 .badge{width:28px;height:28px;border-radius:50%;border:1px solid #bbb;display:flex;align-items:center;justify-content:center;font-weight:700;margin-right:12px;flex:none}.card.selected .badge{background:#d77fa3;color:#fff;border-color:#222}
 .name{font-size:16px;font-weight:700;flex:1}.unknown{font-size:12px;border:1px solid #c8c4bd;background:#fff7fa;border-radius:9px;padding:8px 9px;cursor:pointer;color:#555}.unknown.active{background:#d77fa3;color:#fff;border-color:#d77fa3}
 .actions{display:flex;gap:8px;margin-top:14px}button{border:0;border-radius:11px;padding:13px 16px;font-size:14px;font-weight:700;cursor:pointer}.primary{background:#d77fa3;color:#fff;flex:1}.secondary{background:#f2dbe5;color:#5a404a}button:disabled{opacity:.35;cursor:not-allowed}
-.note{font-size:11px;color:#888;line-height:1.6;margin-top:13px;text-align:center}.result{display:none}.result h2{text-align:center;font-size:23px;margin:8px 0 6px}.resultIntro{text-align:center;color:#777;font-size:12px;line-height:1.6;margin-bottom:18px}
+.note{font-size:11px;color:#888;line-height:1.6;margin-top:13px;text-align:center}
+.publicRankEntry{margin-top:22px;padding-top:18px;border-top:1px solid #efd3df;text-align:center}
+.everyoneEntry{width:100%;font-size:14px}
+.publicRankEntryNote{font-size:11px;color:#888;line-height:1.6;margin-top:8px}.result{display:none}.result h2{text-align:center;font-size:23px;margin:8px 0 6px}.resultIntro{text-align:center;color:#777;font-size:12px;line-height:1.6;margin-bottom:18px}
+.rankTabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#f2dbe5;border-radius:13px;padding:5px;margin:0 0 16px}
+.rankTab{border:0;background:transparent;color:#7a5b68;padding:11px 8px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer}
+.rankTab.active{background:#fff;color:#4a3940;box-shadow:0 1px 3px #00000012}
+.aggregateResult{display:none}
+.aggregateIntro{text-align:center;color:#777;font-size:12px;line-height:1.7;margin-bottom:14px}
+.aggregateMeta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:15px}
+.aggregateMeta .stat{padding:11px}
+.aggregateRank{display:grid;grid-template-columns:42px minmax(0,1fr);gap:8px;align-items:center;background:#fff;border:1px solid #efd3df;border-radius:12px;padding:10px 12px;margin:7px 0}
+.aggregateRank .aggregateNum{font-size:18px;font-weight:800;color:#777;text-align:center}
+.aggregateRank .aggregateSong{font-weight:700;min-width:0}
+.aggregateMetrics{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;color:#888;font-size:10px;padding-left:42px}
+.aggregateMetrics span{white-space:nowrap}
+.aggregateLoading{text-align:center;color:#777;font-size:12px;padding:18px 0}
+.aggregateError{text-align:center;color:#8b4f64;background:#fff7fa;border:1px solid #efd3df;border-radius:10px;padding:12px;font-size:11px;line-height:1.7}
+
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}.stat{background:#fffafd;border:1px solid #efd3df;border-radius:12px;padding:12px;text-align:center}.stat b{display:block;font-size:21px}.stat span{font-size:11px;color:#888}
 .rank{display:flex;align-items:center;background:#fff;border-radius:12px;padding:11px 12px;margin:7px 0;border:1px solid #efd3df}.num{width:38px;font-size:18px;font-weight:800;color:#777;text-align:center}.song{font-weight:700;flex:1}.score{font-size:11px;color:#999}.top10{background:#f9dce8}.rank.medal{padding:13px 12px}.rank.medal .num{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;background:#fff;border:1px solid #d8d5cf}.rank.medal .song{font-size:16px}.moreRanks{width:100%;margin-top:10px}.shareNote{font-size:11px;color:#888;text-align:center;line-height:1.6;margin-top:8px}.sharePreview{display:none;margin-top:12px;text-align:center}.sharePreview img{max-width:100%;border-radius:12px;border:1px solid #efd3df}
 .unknownList{margin-top:20px}.unknownList h3{font-size:14px;margin:0 0 8px}.unknownItem{display:inline-block;background:#f2dbe5;border-radius:8px;padding:6px 8px;margin:3px;font-size:11px}
 .share{width:100%;margin-top:15px}.restart{width:100%;margin-top:9px}.small{font-size:11px;color:#999;text-align:center;margin-top:12px;line-height:1.6}
 @media(max-width:430px){.unknown{padding:7px;font-size:11px}.name{font-size:15px}}
 </style></head>
-<body><div class="wrap">
+<body><div class="wrap" data-ranking-version="stable-5song-supabase-fixed-songs">
 <section id="game">
 <h1>あなたのMyDearDarlin'楽曲ランキング</h1><div class="sub">まず42曲を一度ずつ確認し、その後であなたの好きな順を作ります</div>
 <div class="progress"><div class="bar" id="bar"></div></div><div class="status"><span id="roundText">1問目</span><span id="phaseText">まずは全体を把握中</span></div>
@@ -25,16 +43,43 @@
 <div class="cards" id="cards"></div>
 <div class="actions"><button class="secondary" id="resetSel" type="button">選び直す</button><button class="primary" id="decide" type="button" disabled>この順位で決定</button></div>
 <div class="note">最初は42曲すべてが一度は登場します。「知らない」は最下位にはせず、以後の比較候補から除外します。</div>
+<div class="publicRankEntry">
+  <button class="secondary everyoneEntry" id="everyoneEntry" type="button">まずはみんなのランキングを見てみる</button>
+  <div class="publicRankEntryNote">ランキング作成なしで、現在の集計結果を見ることができます。</div>
+</div>
 </section>
 <section class="result" id="result">
-<h1>あなたのMyDearDarlin'楽曲ランキング</h1><h2>あなたのランキング</h2><div class="resultIntro" id="resultIntro"></div>
+<h1>あなたのMyDearDarlin'楽曲ランキング</h1>
+<div class="rankTabs">
+<button class="rankTab active" id="tabPersonal" type="button">あなたのランキング</button>
+<button class="rankTab" id="tabEveryone" type="button">みんなのランキング</button>
+</div>
+<div id="personalResult">
+<h2>あなたのランキング</h2><div class="resultIntro" id="resultIntro"></div>
 <div class="stats"><div class="stat"><b id="knownCount">0</b><span>知っている曲</span></div><div class="stat"><b id="unknownCount">0</b><span>知らない曲</span></div></div>
 <div id="ranking"></div><button class="secondary moreRanks" id="moreRanks" type="button">11位以下を見る</button><div class="unknownList" id="unknownBox"></div>
+<div id="aggregateBox" style="margin-top:18px;background:#fffafd;border:1px solid #efd3df;border-radius:12px;padding:14px;">
+<div style="font-weight:700;font-size:14px;margin-bottom:6px;">みんなのランキングに参加</div>
+<div style="font-size:11px;color:#777;line-height:1.7;margin-bottom:10px;">
+このランキングを、匿名の集計データとして「みんなのランキング」に反映できます。<br>
+送信するのは、42曲それぞれの順位と「知らない」とした曲の情報だけです。名前・メールアドレス・Xアカウントなどは送信しません。
+</div>
+<button class="primary" id="submitAggregate" type="button">匿名で集計に参加する</button>
+<div id="submitStatus" style="font-size:11px;color:#888;text-align:center;margin-top:8px;"></div>
+</div>
 <button class="primary share" id="share" type="button">TOP10を画像でシェア</button><div class="shareNote">SNSではTOP10の画像と、このランキングページのURLを共有できます。</div><div class="sharePreview" id="sharePreview"><div class="shareNote">共有用画像</div><img id="shareImage" alt="MyDearDarlin'ランキング共有画像"></div><button class="secondary restart" id="restart" type="button">もう一度遊ぶ</button>
 <div class="small">「知らない」と答えた曲は順位に影響せず、以後の比較候補から除外されます。<br>同じ人でも、その日の気分でランキングが変わってOKです。</div>
+</div>
+<div class="aggregateResult" id="aggregateResult">
+<h2>みんなのランキング</h2>
+<div class="aggregateIntro" id="aggregateIntro">みんなの回答を集計しています。</div>
+<div id="aggregateContent"><div class="aggregateLoading">集計結果を読み込んでいます…</div></div>
+</div>
 </section></div>
 <script>
 const songs=["My Dear","ナノLOVE","夏が来る","トーキョーガール","Kaleid0scopE","MDDシンドローム","七転八起ドリーマー","FLOWER","君の声","ぱっ！！！！！！ねーしょん","ラブレター","Symphony#5","アイスクリーム","PSPP","Twilight","LiaR","告白","一生涯オリジナリティ","真夏の彼方","Doki Doki ロングバケーション","DA DA DA！","君色ダイアリー","ミチシルベ","SAYONARA","夏色Runner","ブレーメン","僕らの詩","Shout It Out","プラネタリウム","恋と花火とひとひらわたし","Music Fighter","雪恋トリガー","キャラメルミルク","一番星","レペゼンアース","Candy Chu！","ハナムケロンリー","約束","青の君","ポケット","ワガママHOLiDAY","恋するトップノート"];
+const SUPABASE_URL="https://oovahbtosrnbvvfbomgc.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_4w359II-SWOm98G4F8Ximw_jtFZwBTy";
 const N=songs.length, MIN=16, MAX=30;
 let round=0,selected=[],unknown=new Set(),current=[],wins=Array.from({length:N},()=>Array(N).fill(0)),games=Array(N).fill(0),history=[],known=new Set(),unknownFinal=new Set(),shownOnce=new Set();
 
@@ -131,7 +176,7 @@ function resetCurrentQuestion(){
 function render(){ newQuestion(); }
 function toggleUnknown(idx,el){
  // 「知らない」は、同じ画面で再度タップすると取り消せる。
- // 取り消した曲は、以後の比較候補にも戻る。：
+ // 取り消した曲は、以後の比較候補にも戻る。
  if(unknown.has(idx)){
    unknown.delete(idx);
    unknownFinal.delete(idx);
@@ -196,6 +241,38 @@ function finish(){
  document.getElementById("moreRanks").onclick=()=>{visible=!visible;drawRanks();window.scrollTo({top:document.getElementById("ranking").offsetTop-12,behavior:"smooth"})};
  let ub=document.getElementById("unknownBox");if(unknownFinal.size){ub.innerHTML="<h3>今回「知らない」とした曲</h3>"+[...unknownFinal].map(x=>`<span class="unknownItem">${songs[x]}</span>`).join("")}else ub.innerHTML="";
 
+ // 匿名集計用データをSupabaseへ送信する。
+ // 「知らない」曲はnull、知っている曲は最終順位(1位=1)を保存する。
+ const submitBtn=document.getElementById("submitAggregate");
+ const submitStatus=document.getElementById("submitStatus");
+ submitBtn.onclick=async()=>{
+   if(submitBtn.disabled)return;
+   submitBtn.disabled=true;
+   submitStatus.textContent="送信中…";
+   const finalRanks=Array(N).fill(null);
+   r.forEach((idx,pos)=>{finalRanks[idx]=pos+1;});
+   const knownFlags=Array.from({length:N},(_,idx)=>!unknownFinal.has(idx));
+   try{
+     const res=await fetch(SUPABASE_URL+"/rest/v1/ranking_answers",{
+       method:"POST",
+       headers:{
+         "Content-Type":"application/json",
+         "apikey":SUPABASE_PUBLISHABLE_KEY,
+         "Authorization":"Bearer "+SUPABASE_PUBLISHABLE_KEY,
+         "Prefer":"return=minimal"
+       },
+       body:JSON.stringify({ranks:finalRanks,known:knownFlags})
+     });
+     if(!res.ok)throw new Error("HTTP "+res.status);
+     submitStatus.textContent="送信しました。ご協力ありがとうございます。";
+     submitBtn.textContent="集計への参加済み";
+   }catch(err){
+     console.error(err);
+     submitStatus.textContent="送信できませんでした。通信状態を確認して、もう一度お試しください。";
+     submitBtn.disabled=false;
+   }
+ };
+
  function makeShareImage(){
    const w=1080,h=1350;
    const c=document.createElement("canvas");c.width=w;c.height=h;const ctx=c.getContext("2d");
@@ -234,17 +311,112 @@ function finish(){
      if(navigator.share){
        try{
          if(navigator.canShare && navigator.canShare({files:[file]})){
-           await navigator.share({title:"MyDearDarlin' 楽曲ランキング",text:"私のMyDearDarlin'楽曲ランキングTOP10です。\nあなたもランキングを作ってみよう！ #マイディア\n"+url,files:[file]});
+           await navigator.share({title:"MyDearDarlin' 楽曲ランキング",text:"私のMyDearDarlin'楽曲ランキングTOP10です。\nあなたもランキングを作ってみよう！\n#マイディア\n"+url,files:[file]});
          }else{
-           await navigator.share({title:"MyDearDarlin' 楽曲ランキング",text:"私のMyDearDarlin'楽曲ランキングTOP10です。\nあなたもランキングを作ってみよう！ #マイディア\n"+url});
+           await navigator.share({title:"MyDearDarlin' 楽曲ランキング",text:"私のMyDearDarlin'楽曲ランキングTOP10です。\nあなたもランキングを作ってみよう！\n#マイディア\n"+url});
          }
        }catch(e){}
      }else{
-       alert("この端　末では直接シェアできないため、画面に表示した画像を保存してSNSでシェアしてください。URLも一緒に添えてください。");
+       alert("この端末では直接シェアできないため、画面に表示した画像を保存してSNSでシェアしてください。URLも一緒に添えてください。");
      }
    },"image/png");
  };
 }
+
+const tabPersonal=document.getElementById("tabPersonal");
+const tabEveryone=document.getElementById("tabEveryone");
+const personalResult=document.getElementById("personalResult");
+const aggregateResult=document.getElementById("aggregateResult");
+let aggregateLoaded=false;
+
+function setResultTab(which){
+  const personal=which==="personal";
+  tabPersonal.classList.toggle("active",personal);
+  tabEveryone.classList.toggle("active",!personal);
+  personalResult.style.display=personal?"block":"none";
+  aggregateResult.style.display=personal?"none":"block";
+  if(!personal && !aggregateLoaded) loadAggregate();
+}
+document.getElementById("everyoneEntry").addEventListener("click",()=>{
+  document.getElementById("game").style.display="none";
+  document.getElementById("result").style.display="block";
+  setResultTab("everyone");
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+tabPersonal.addEventListener("click",()=>setResultTab("personal"));
+tabEveryone.addEventListener("click",()=>setResultTab("everyone"));
+
+async function loadAggregate(){
+  const content=document.getElementById("aggregateContent");
+  content.innerHTML='<div class="aggregateLoading">集計結果を読み込んでいます…</div>';
+  try{
+    const params=new URLSearchParams({
+      select:"song_index,song_title,overall_score,avg_rank,first_place_rate,awareness,respondents",
+      order:"overall_score.desc.nullslast,awareness.desc.nullslast,avg_rank.asc.nullslast"
+    });
+    const res=await fetch(SUPABASE_URL+"/rest/v1/ranking_public_stats?"+params.toString(),{
+      method:"GET",
+      headers:{
+        "apikey":SUPABASE_PUBLISHABLE_KEY,
+        "Authorization":"Bearer "+SUPABASE_PUBLISHABLE_KEY
+      }
+    });
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    const rows=await res.json();
+    if(!Array.isArray(rows)) throw new Error("Invalid response");
+
+    const respondents=Number(rows[0]?.respondents||0);
+    if(respondents===0){
+      content.innerHTML='<div class="aggregateError">まだ集計データがありません。最初の回答が集まるまでお待ちください。</div>';
+      return;
+    }
+
+    aggregateLoaded=true;
+    document.getElementById("aggregateIntro").textContent=
+      `現在${respondents}人の回答を集計しています。総合順位は「順位の強さ＋認知度」を反映しています。`;
+
+    const meta=document.createElement("div");
+    meta.className="aggregateMeta";
+    meta.innerHTML=
+      `<div class="stat"><b>${respondents}</b><span>回答者数</span></div>`+
+      `<div class="stat"><b>${rows.length}</b><span>集計曲数</span></div>`;
+
+    const box=document.createElement("div");
+    rows.forEach((row,i)=>{
+      const e=document.createElement("div");
+      e.className="aggregateRank";
+      const medal=["🥇","🥈","🥉"][i];
+      e.innerHTML=
+        `<div class="aggregateNum">${medal||String(i+1)}</div>`+
+        `<div class="aggregateSong">${escapeHtml(row.song_title||"")}</div>`+
+        `<div class="aggregateMetrics">`+
+        `<span>平均順位 ${formatMetric(row.avg_rank)}</span>`+
+        `<span>1位率 ${formatPct(row.first_place_rate)}</span>`+
+        `<span>認知度 ${formatPct(row.awareness)}</span>`+
+        `</div>`;
+      box.appendChild(e);
+    });
+
+    content.innerHTML="";
+    content.appendChild(meta);
+    content.appendChild(box);
+  }catch(err){
+    console.error(err);
+    content.innerHTML='<div class="aggregateError">みんなのランキングを読み込めませんでした。しばらくしてからもう一度お試しください。</div>';
+  }
+}
+function formatMetric(v){
+  const n=Number(v);
+  return Number.isFinite(n)?n.toFixed(2):"—";
+}
+function formatPct(v){
+  const n=Number(v);
+  return Number.isFinite(n)?(n*100).toFixed(1)+"%":"—";
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+}
+
 document.getElementById("restart").addEventListener("click",()=>location.reload());
 render();
-</script></body></h
+</script></body></html>
