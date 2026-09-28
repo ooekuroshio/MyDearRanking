@@ -131,7 +131,7 @@ function resetCurrentQuestion(){
 function render(){ newQuestion(); }
 function toggleUnknown(idx,el){
  // 「知らない」は、同じ画面で再度タップすると取り消せる。
- // 取り消した曲は、以後の比較候補にも戻る。
+ // 取り消した曲は、以後の比較候補にも戻る。：
  if(unknown.has(idx)){
    unknown.delete(idx);
    unknownFinal.delete(idx);
@@ -240,11 +240,11 @@ function finish(){
          }
        }catch(e){}
      }else{
-       alert("この端末では直接シェアできないため、画面に表示した画像を保存してSNSでシェアしてください。URLも一緒に添えてください。");
+       alert("この端　末では直接シェアできないため、画面に表示した画像を保存してSNSでシェアしてください。URLも一緒に添えてください。");
      }
    },"image/png");
  };
 }
 document.getElementById("restart").addEventListener("click",()=>location.reload());
 render();
-</script></body></html>
+</script></body></h
