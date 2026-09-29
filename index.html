@@ -39,10 +39,10 @@
 <section id="game">
 <h1>あなたのMyDearDarlin'楽曲ランキング</h1><div class="sub">まず42曲を一度ずつ確認し、その後であなたの好きな順を作ります</div>
 <div class="progress"><div class="bar" id="bar"></div></div><div class="status"><span id="roundText">1問目</span><span id="phaseText">まずは全体を把握中</span></div>
-<div class="question">好きな曲の順にタップして下さい</div><div class="hint">知らない曲は、右の「知らない」を押してください</div>
+<div class="question">好きな曲の順にタップして下さい</div><div class="hint">知らない曲は、右の「知らない」を押してください。押した後、もう一度押すと取り消せます。</div>
 <div class="cards" id="cards"></div>
 <div class="actions"><button class="secondary" id="resetSel" type="button">選び直す</button><button class="primary" id="decide" type="button" disabled>この順位で決定</button></div>
-<div class="note">最初は42曲すべてが一度は登場します。「知らない」は最下位にはせず、以後の比較候補から除外します。</div>
+<div class="note">最初は42曲すべてが一度は登場します。「知らない」は最下位にはせず、以後の比較候補から除外します。5曲すべてを「知らない」にはできません。</div>
 <div class="publicRankEntry">
   <button class="secondary everyoneEntry" id="everyoneEntry" type="button">まずはみんなのランキングを見てみる</button>
   <div class="publicRankEntryNote">ランキング作成なしで、現在の集計結果を見ることができます。</div>
@@ -150,7 +150,7 @@ function drawCards(){
   let el=document.createElement("div");
   el.className="card"+(unknown.has(idx)?" excluded":"");
   el.dataset.idx=idx;
-  el.innerHTML='<div class="badge">'+(unknown.has(idx)?"×":(selected.includes(idx)?selected.indexOf(idx)+1:"—"))+'</div><div class="name">'+songs[idx]+'</div><button class="unknown'+(unknown.has(idx)?" active":"")+'" type="button">'+(unknown.has(idx)?"知らない ✓":"知らない")+'</button>';
+  el.innerHTML='<div class="badge">'+(unknown.has(idx)?"×":(selected.includes(idx)?selected.indexOf(idx)+1:"—"))+'</div><div class="name">'+songs[idx]+'</div><button class="unknown'+(unknown.has(idx)?" active":"")+'" type="button">'+(unknown.has(idx)?"知らないを取り消す":"知らない")+'</button>';
   el.querySelector(".unknown").addEventListener("click",e=>{e.preventDefault();e.stopPropagation();toggleUnknown(idx,el)});
   el.addEventListener("click",e=>{if(!e.target.closest(".unknown")) choose(idx)});
   if(selected.includes(idx)) el.classList.add("selected");
@@ -200,7 +200,7 @@ function update(){
  document.getElementById("roundText").textContent=`${round+1}問目`;
  const allSeen=shownOnce.size>=N;
  document.getElementById("bar").style.width=(allSeen?Math.min(100,(round-Math.ceil(N/5))/(MAX-Math.ceil(N/5))*100):Math.min(100,shownOnce.size/N*100))+"%";
- document.getElementById("decide").disabled=(selected.length+unknown.size!==5);
+ document.getElementById("decide").disabled=(selected.length===0 || selected.length+unknown.size!==5);
  document.getElementById("phaseText").textContent=allSeen?"ランキングを整理中":`全42曲を確認中（${shownOnce.size}/42曲）`;
 }
 document.getElementById("resetSel").addEventListener("click",resetCurrentQuestion);
@@ -268,9 +268,7 @@ function finish(){
      submitBtn.textContent="集計への参加済み";
    }catch(err){
      console.error(err);
-     }catch(err){
-  console.error(err);
-  submitStatus.textContent="送信できませんでした。通信状態を確認して、もう一度お試しください。";
+     submitStatus.textContent="送信できませんでした。通信状態を確認して、もう一度お試しください。";
      submitBtn.disabled=false;
    }
  };
