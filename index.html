@@ -261,8 +261,6 @@ function finish(){
          "Authorization":"Bearer "+SUPABASE_PUBLISHABLE_KEY,
          "Prefer":"return=minimal"
        },
-       console.log("送信 ranks:", finalRanks);
-console.log("送信 known:", knownFlags);
        body:JSON.stringify({ranks:finalRanks,known:knownFlags})
      });
 if(!res.ok){
