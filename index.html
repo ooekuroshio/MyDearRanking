@@ -270,9 +270,7 @@ function finish(){
      console.error(err);
      }catch(err){
   console.error(err);
-  submitStatus.textContent="送信エラー："+err.message;
-  submitBtn.disabled=false;
-}
+  submitStatus.textContent="送信できませんでした。通信状態を確認して、もう一度お試しください。";
      submitBtn.disabled=false;
    }
  };
