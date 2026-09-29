@@ -263,7 +263,11 @@ function finish(){
        },
        body:JSON.stringify({ranks:finalRanks,known:knownFlags})
      });
-     if(!res.ok)throw new Error("HTTP "+res.status);
+    if(!res.ok){
+  const detail=await res.text();
+  console.error("Supabase error:",res.status,detail);
+  throw new Error("HTTP "+res.status+" : "+detail);
+}
      submitStatus.textContent="送信しました。ご協力ありがとうございます。";
      submitBtn.textContent="集計への参加済み";
    }catch(err){
