@@ -35,9 +35,9 @@
 .share{width:100%;margin-top:15px}.restart{width:100%;margin-top:9px}.small{font-size:11px;color:#999;text-align:center;margin-top:12px;line-height:1.6}
 @media(max-width:430px){.unknown{padding:7px;font-size:11px}.name{font-size:15px}}
 </style></head>
-<body><div class="wrap" data-ranking-version="stable-5song-supabase-fixed-songs">
+<body><div class="wrap" data-ranking-version="stable-5song-43-songs-supabase-fixed">
 <section id="game">
-<h1>あなたのMyDearDarlin'楽曲ランキング</h1><div class="sub">まず42曲を一度ずつ確認し、その後であなたの好きな順を作ります</div>
+<h1>あなたのMyDearDarlin'楽曲ランキング</h1><div class="sub">まず43曲を一度ずつ確認し、その後であなたの好きな順を作ります</div>
 <div class="progress"><div class="bar" id="bar"></div></div><div class="status"><span id="roundText">1問目</span><span id="phaseText">まずは全体を把握中</span></div>
 <div class="question">好きな曲の順にタップして下さい</div><div class="hint">知らない曲は「知らない」を押してください。5曲すべて知らなくても、そのまま進めます。</div>
 <div class="cards" id="cards"></div>
@@ -47,7 +47,7 @@
   <div style="font-size:11px;color:#777;line-height:1.6;margin-bottom:8px;">あとから取り消せます。取り消した曲は、もう一度比較候補に戻ります。</div>
   <div id="unknownReviewList"></div>
 </div>
-<div class="note">最初は42曲すべてが一度は登場します。「知らない」にした曲は順位に影響せず、以後の比較候補から除外されます。除外した曲は「知らない曲を見直す」からいつでも取り消せます。</div>
+<div class="note">最初は43曲すべてが一度は登場します。「知らない」にした曲は順位に影響せず、以後の比較候補から除外されます。除外した曲は「知らない曲を見直す」からいつでも取り消せます。</div>
 <div class="publicRankEntry">
   <button class="secondary everyoneEntry" id="everyoneEntry" type="button">まずはみんなのランキングを見てみる</button>
   <div class="publicRankEntryNote">ランキング作成なしで、現在の集計結果を見ることができます。</div>
@@ -67,7 +67,7 @@
 <div style="font-weight:700;font-size:14px;margin-bottom:6px;">みんなのランキングに参加</div>
 <div style="font-size:11px;color:#777;line-height:1.7;margin-bottom:10px;">
 このランキングを、匿名の集計データとして「みんなのランキング」に反映できます。<br>
-送信するのは、42曲それぞれの順位と「知らない」とした曲の情報だけです。名前・メールアドレス・Xアカウントなどは送信しません。
+送信するのは、43曲それぞれの順位と「知らない」とした曲の情報だけです。名前・メールアドレス・Xアカウントなどは送信しません。
 </div>
 <button class="primary" id="submitAggregate" type="button">匿名で集計に参加する</button>
 <div id="submitStatus" style="font-size:11px;color:#888;text-align:center;margin-top:8px;"></div>
@@ -82,7 +82,7 @@
 </div>
 </section></div>
 <script>
-const songs=["My Dear","ナノLOVE","夏が来る","トーキョーガール","Kaleid0scopE","MDDシンドローム","七転八起ドリーマー","FLOWER","君の声","ぱっ！！！！！！ねーしょん","ラブレター","Symphony#5","アイスクリーム","PSPP","Twilight","LiaR","告白","一生涯オリジナリティ","真夏の彼方","Doki Doki ロングバケーション","DA DA DA！","君色ダイアリー","ミチシルベ","SAYONARA","夏色Runner","ブレーメン","僕らの詩","Shout It Out","プラネタリウム","恋と花火とひとひらわたし","Music Fighter","雪恋トリガー","キャラメルミルク","一番星","レペゼンアース","Candy Chu！","ハナムケロンリー","約束","青の君","ポケット","ワガママHOLiDAY","恋するトップノート"];
+const songs=["My Dear","ナノLOVE","夏が来る","トーキョーガール","Kaleid0scopE","MDDシンドローム","七転八起ドリーマー","FLOWER","君の声","ぱっ！！！！！！ねーしょん","ラブレター","Symphony#5","アイスクリーム","PSPP","Twilight","LiaR","告白","一生涯オリジナリティ","真夏の彼方","Doki Doki ロングバケーション","DA DA DA！","君色ダイアリー","ミチシルベ","SAYONARA","夏色Runner","ブレーメン","僕らの詩","Shout It Out","プラネタリウム","恋と花火とひとひらわたし","Music Fighter","雪恋トリガー","キャラメルミルク","一番星","レペゼンアース","Candy Chu！","ハナムケロンリー","約束","青の君","ポケット","ワガママHOLiDAY","恋するトップノート","STAY BRIGHT"];
 const SUPABASE_URL="https://oovahbtosrnbvvfbomgc.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_4w359II-SWOm98G4F8Ximw_jtFZwBTy";
 const N=songs.length, MIN=16, MAX=30;
@@ -98,7 +98,7 @@ function scores(){
 }
 function ranking(){let s=scores();return [...Array(N).keys()].sort((a,b)=>s[b]-s[a])}
 function pick(){
- // 最初は42曲すべてを最低1回は表示する「全曲確認フェーズ」。
+ // 最初は43曲すべてを最低1回は表示する「全曲確認フェーズ」。
  // その後、従来の適応型5曲比較へ移行する。
  const excluded=new Set(unknownFinal);
  let available=[...Array(N).keys()].filter(x=>!excluded.has(x));
@@ -226,7 +226,7 @@ function update(){
  const allSeen=shownOnce.size>=N;
  document.getElementById("bar").style.width=(allSeen?Math.min(100,(round-Math.ceil(N/5))/(MAX-Math.ceil(N/5))*100):Math.min(100,shownOnce.size/N*100))+"%";
  document.getElementById("decide").disabled=(selected.length+unknown.size!==5);
- document.getElementById("phaseText").textContent=allSeen?"ランキングを整理中":`全42曲を確認中（${shownOnce.size}/42曲）`;
+ document.getElementById("phaseText").textContent=allSeen?"ランキングを整理中":`全43曲を確認中（${shownOnce.size}/43曲）`;
 }
 document.getElementById("resetSel").addEventListener("click",resetCurrentQuestion);
 document.getElementById("decide").addEventListener("click",()=>{
